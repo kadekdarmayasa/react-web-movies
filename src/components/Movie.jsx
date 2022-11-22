@@ -1,61 +1,68 @@
 import React from 'react';
-import '../assets/css/main.css';
 import MovieDisplay from './MovieDisplay';
 import MovieNotFound from './MovieNotFound';
+import Mode from './Mode';
 
 class Movie extends React.Component {
-	constructor(props) {
-		super(props);
+	constructor() {
+		super();
 		this.state = {
 			movieData: [],
 			page: 1,
+			maxPage: null,
 			keyword: 'Avengers',
 			isMovieFound: true,
 		};
 	}
 
-	componentDidMount() {
-		this.getMovie();
-	}
+	componentDidMount = () => this.getMovie();
 
-	handleClick() {
+	getKeyword = () => {
 		const keyword = document.getElementById('keyword');
-		if (keyword.value != '') {
-			this.setState({ keyword: keyword.value }, this.getMovie);
-		}
-	}
+		keyword.value != '' && this.setState({ keyword: keyword.value }, this.getMovie);
+	};
 
-	getMovie() {
+	decrement = () => this.state.page > 1 && this.setState({ page: --this.state.page }, this.getMovie);
+
+	increment = () => this.state.page < this.state.maxPage && this.setState({ page: ++this.state.page }, this.getMovie);
+
+	getMovie = () => {
 		fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=36a96d2e&s=${this.state.keyword}&page=${this.state.page}`)
-			.then((response) => {
-				return response.json();
-			})
+			.then((response) => response.json())
 			.then((results) => {
-				if (results.Response != 'False') {
-					this.setState({
-						movieData: results.Search,
-					});
-					this.setState({ isMovieFound: true });
+				if (results.Response == 'False') {
+					this.setState(() => ({ isMovieFound: false }));
 				} else {
-					this.setState({ isMovieFound: false });
+					const totalResults = +results.totalResults;
+					const totalDataPerPage = 10;
+					const page = Math.floor(totalResults / totalDataPerPage);
+
+					this.setState(() => ({
+						movieData: results.Search,
+						isMovieFound: true,
+						maxPage: page - 1,
+					}));
 				}
 			});
-	}
+	};
 
-	render() {
+	render = () => {
 		return (
 			<>
-				<header className="container mx-auto">
-					<h1 className="text-2xl font-semibold text-center mt-20">WONDERFUL & POPULAR MOVIES</h1>
-					<hr className="block w-[270px] h-[2px] overflow-visible relative bg-slate-300 mt-2 mx-auto" />
-					<div className="form-control mt-5">
-						<div className="input-group flex justify-center">
-							<input type="text" placeholder="Search…" className="input input-bordered w-[300px] md:w-[700px]" id="keyword" required />
-							<button className="btn btn-square btn-success" onClick={() => this.handleClick()}>
-								<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-								</svg>
-							</button>
+				<header>
+					<Mode />
+					<div className="container mx-auto">
+						<h1 className="text-2xl font-semibold text-center pt-16">WONDERFUL & POPULAR MOVIES</h1>
+						<hr className="block w-[270px] h-[2px] overflow-visible relative bg-slate-300 mt-2 mx-auto" />
+						<div className="form-control mt-10">
+							<div className="input-group flex justify-center">
+								<input type="text" placeholder="Search…" className="input input-bordered w-[300px] md:w-[700px]" id="keyword" required />
+								<button className="btn btn-square btn-success" onClick={() => this.getKeyword()}>
+									<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+									</svg>
+								</button>
+							</div>
 						</div>
 					</div>
 				</header>
@@ -74,16 +81,20 @@ class Movie extends React.Component {
 							</div>
 
 							<div className="btn-group mt-20 flex justify-center">
-								<button className="btn btn-outline btn-success">«</button>
+								<button className="btn btn-outline btn-success" onClick={() => this.decrement()}>
+									«
+								</button>
 								<button className="btn btn-success">Page {this.state.page}</button>
-								<button className="btn btn-outline btn-success">»</button>
+								<button className="btn btn-outline btn-success" onClick={() => this.increment()}>
+									»
+								</button>
 							</div>
 						</div>
 					)}
 				</main>
 			</>
 		);
-	}
+	};
 }
 
 export default Movie;

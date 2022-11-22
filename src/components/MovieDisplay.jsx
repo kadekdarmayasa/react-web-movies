@@ -1,8 +1,8 @@
 function MovieDisplay({ poster, title, type, year }) {
 	return (
-		<div className="card w-72 xl:w-96 bg-base-200 shadow-sm cursor-pointer hover:shadow-xl transition-all ">
+		<div className="group card w-72 xl:w-96 h-80 shadow-sm cursor-pointer hover:shadow-xl transition-all ">
 			<figure className="w-full">
-				<img src={poster} alt={title} className="object-cover w-full saturate-150 contrast-75 hover:contrast-100" />
+				<img src={poster} alt={title} className="group-hover:scale-105 object-cover w-full saturate-150 contrast-75 hover:contrast-100 transition-all" />
 			</figure>
 			<div className="card-body">
 				<h2 className="card-title">{title}</h2>
