@@ -27,7 +27,7 @@ class Movie extends React.Component {
 	increment = () => this.state.page < this.state.maxPage && this.setState({ page: ++this.state.page }, this.getMovie);
 
 	getMovie = () => {
-		fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=36a96d2e&s=${this.state.keyword}&page=${this.state.page}`)
+		fetch(`http://www.omdbapi.com/?apikey=36a96d2e&s=${this.state.keyword}&page=${this.state.page}`)
 			.then((response) => response.json())
 			.then((results) => {
 				if (results.Response == 'False') {
@@ -75,7 +75,7 @@ class Movie extends React.Component {
 							<div className="flex gap-4 gap-y-10 flex-wrap justify-center">
 								{this.state.movieData.map((data) => {
 									if (data.Poster != 'N/A') {
-										return <MovieDisplay key={data.imdbID} poster={data.Poster} title={data.Title} type={data.Type} year={data.Year} />;
+										return <MovieDisplay key={data.imdbID} id={data.imdbID} poster={data.Poster} title={data.Title} type={data.Type} year={data.Year} />;
 									}
 								})}
 							</div>

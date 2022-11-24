@@ -8,13 +8,18 @@ function Mode() {
 		if (!isActive) {
 			setModeIcon('sun');
 			setIsActive(true);
+			localStorage.setItem('DARK-MODE', true);
 		} else {
 			setModeIcon('moon');
 			setIsActive(false);
+			localStorage.removeItem('DARK-MODE');
 		}
 	};
 
 	useEffect(() => {
+		if (localStorage.getItem('DARK-MODE')) {
+			setIsActive(true);
+		}
 		isActive ? document.body.classList.add('dark') : document.body.classList.remove('dark');
 	});
 
