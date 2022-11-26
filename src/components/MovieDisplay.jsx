@@ -1,20 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import MovieDetails from './MovieDetails';
+import DataSource from '../data/DataSource';
 
 function MovieDisplay({ id, poster, title, type, year }) {
-	const [movieID, setMovieID] = useState('');
+	const [isShowModal, setIsShowModal] = useState(false);
 
 	useEffect(() => {
-		if (movieID != '') {
-			document.getElementById('modal-btn').click();
-			document.getElementById('title').innerHTML = title;
-			setMovieID('');
+		if (isShowModal) {
+			DataSource.getMovies(id).then((result) => {
+				document.getElementById('title').innerHTML = result.Title;
+				document.getElementById('poster').setAttribute('src', result.Poster);
+				document.getElementById('released').innerHTML = result.Released;
+				document.getElementById('awards').innerHTML = result.Awards;
+				document.getElementById('actors').innerHTML = result.Actors;
+				document.getElementById('director').innerHTML = result.Director;
+				document.getElementById('writer').innerHTML = result.Writer;
+				document.getElementById('plot').innerHTML = result.Plot;
+				document.getElementById('modal-btn').click();
+			});
+
+			document.getElementById('close-btn').addEventListener('click', () => {
+				setIsShowModal(false);
+			});
 		}
 	});
 
 	return (
 		<>
-			<div id={id} htmlFor="my-modal" className="group card w-72 xl:w-96 h-80 shadow-sm cursor-pointer hover:shadow-xl transition-all dark:bg-slate-800/50 dark:backdrop-blur-md" onClick={() => setMovieID(id)}>
+			<div htmlFor="my-modal" className="group card w-[80%] md:w-72 xl:w-96 h-80 shadow-sm cursor-pointer hover:shadow-xl transition-all dark:bg-slate-800/50 dark:backdrop-blur-md" onClick={() => setIsShowModal(true)}>
 				<figure className="w-full">
 					<img src={poster} alt={title} className="group-hover:scale-105 object-cover w-full saturate-150 contrast-75 hover:contrast-100 transition-all" />
 				</figure>
@@ -26,8 +38,6 @@ function MovieDisplay({ id, poster, title, type, year }) {
 					</div>
 				</div>
 			</div>
-
-			<MovieDetails />
 		</>
 	);
 }
