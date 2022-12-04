@@ -1,0 +1,3 @@
+.header-title {
+	font-size: clamp(1rem, 0.8rem + 1.5vw, 2.2rem);
+}

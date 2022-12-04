@@ -1,4 +1,4 @@
-function Footer() {
+const Footer = () => {
 	return (
 		<footer className="bg-slate-900 text-white mt-10 p-10 text-center">
 			@2022 IKDAP Movies, Indonesia. All Righs Reserved. Powered by
@@ -7,6 +7,6 @@ function Footer() {
 			</a>
 		</footer>
 	);
-}
+};
 
 export default Footer;

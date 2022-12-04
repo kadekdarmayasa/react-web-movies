@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function Mode() {
+const Mode = () => {
 	const [isActive, setIsActive] = useState(false);
 	const [modeIcon, setModeIcon] = useState('moon');
 
@@ -33,6 +33,6 @@ function Mode() {
 			</a>
 		</div>
 	);
-}
+};
 
 export default Mode;
