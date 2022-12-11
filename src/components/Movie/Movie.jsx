@@ -3,6 +3,7 @@ import MovieDisplay from './MovieDisplay';
 import MovieNotFound from './MovieNotFound';
 import Header from '../Header/Header';
 import DataSource from '../../data/DataSource';
+import SkeletonEffectLoading from './SkeletonEffectLoading';
 
 class Movie extends React.Component {
 	constructor() {
@@ -13,6 +14,7 @@ class Movie extends React.Component {
 			maxPage: null,
 			keyword: 'Avengers',
 			isMovieFound: true,
+			skeletonLoadingId: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
 		};
 	}
 
@@ -28,6 +30,8 @@ class Movie extends React.Component {
 	increment = () => this.state.page < this.state.maxPage && this.setState({ page: ++this.state.page }, this.getMovie);
 
 	getMovie = () => {
+		this.setState({ movieData: [] });
+
 		DataSource.getMovie(this.state.keyword, this.state.page).then((results) => {
 			if (results.Response == 'False') {
 				this.setState(() => ({ isMovieFound: false }));
@@ -36,11 +40,17 @@ class Movie extends React.Component {
 				const totalDataPerPage = 10;
 				const page = Math.floor(totalResults / totalDataPerPage);
 
-				this.setState(() => ({
-					movieData: results.Search,
-					isMovieFound: true,
-					maxPage: page - 1,
-				}));
+				if (page > 1) {
+					this.setState(() => ({
+						movieData: results.Search,
+						isMovieFound: true,
+						maxPage: page - 1,
+					}));
+				} else {
+					this.setState(() => ({
+						isMovieFound: false,
+					}));
+				}
 			}
 		});
 	};
@@ -54,12 +64,18 @@ class Movie extends React.Component {
 						MovieNotFound()
 					) : (
 						<div className="container mx-auto  mt-10 p-8">
-							<div className="flex gap-4 gap-y-10 flex-wrap justify-center min-h-[900px]">
-								{this.state.movieData.map((data) => {
-									if (data.Poster != 'N/A') {
-										return <MovieDisplay key={data.imdbID} id={data.imdbID} poster={data.Poster} title={data.Title} type={data.Type} year={data.Year} />;
-									}
-								})}
+							<div className="flex gap-4 gap-y-10 flex-wrap justify-center min-h-[900px] movie-container">
+								{this.state.movieData.length == 0
+									? this.state.skeletonLoadingId.map((id) => {
+											return <SkeletonEffectLoading key={id.toString()} />;
+									  })
+									: this.state.movieData.map((movie) => {
+											{
+												if (movie.Poster != 'N/A') {
+													return <MovieDisplay key={movie.imdbID} id={movie.imdbID} poster={movie.Poster} title={movie.Title} type={movie.Type} year={movie.Year} />;
+												}
+											}
+									  })}
 							</div>
 
 							<div className="btn-group mt-20 flex justify-center">
@@ -70,7 +86,7 @@ class Movie extends React.Component {
 								)}
 								<button className="btn btn-success">Page {this.state.page}</button>
 
-								{this.state.page !== this.state.maxPage && (
+								{this.state.page !== this.state.maxPage - 1 && (
 									<button className="btn btn-outline btn-success" onClick={() => this.increment()}>
 										»
 									</button>
