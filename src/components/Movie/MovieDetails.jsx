@@ -3,7 +3,7 @@ import MovieTextDetails from './MovieTextDetails';
 
 const MovieDetails = () => {
 	return (
-		<>
+		<React.Fragment>
 			<label htmlFor="my-modal-5" className="btn hidden" id="modal-btn">
 				open modal
 			</label>
@@ -33,7 +33,7 @@ const MovieDetails = () => {
 					</div>
 				</div>
 			</div>
-		</>
+		</React.Fragment>
 	);
 };
 

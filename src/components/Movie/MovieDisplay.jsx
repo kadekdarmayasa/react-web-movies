@@ -3,21 +3,23 @@ import DataSource from '../../data/DataSource';
 
 function MovieDisplay({ id, poster, title, type, year }) {
 	const [isShowModal, setIsShowModal] = useState(false);
+	const fillDetailMovie = () => {
+		DataSource.getMovieDetails(id).then((result) => {
+			document.getElementById('title').innerHTML = result.Title;
+			document.getElementById('poster').setAttribute('src', result.Poster);
+			document.getElementById('released').innerHTML = result.Released;
+			document.getElementById('awards').innerHTML = result.Awards;
+			document.getElementById('actors').innerHTML = result.Actors;
+			document.getElementById('director').innerHTML = result.Director;
+			document.getElementById('writer').innerHTML = result.Writer;
+			document.getElementById('plot').innerHTML = result.Plot;
+			document.getElementById('modal-btn').click();
+		});
+	};
 
 	useEffect(() => {
 		if (isShowModal) {
-			DataSource.getMovieDetails(id).then((result) => {
-				document.getElementById('title').innerHTML = result.Title;
-				document.getElementById('poster').setAttribute('src', result.Poster);
-				document.getElementById('released').innerHTML = result.Released;
-				document.getElementById('awards').innerHTML = result.Awards;
-				document.getElementById('actors').innerHTML = result.Actors;
-				document.getElementById('director').innerHTML = result.Director;
-				document.getElementById('writer').innerHTML = result.Writer;
-				document.getElementById('plot').innerHTML = result.Plot;
-				document.getElementById('modal-btn').click();
-			});
-
+			fillDetailMovie();
 			document.getElementById('close-btn').addEventListener('click', () => {
 				setIsShowModal(false);
 			});

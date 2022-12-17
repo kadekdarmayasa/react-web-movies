@@ -4,6 +4,7 @@ import MovieNotFound from './MovieNotFound';
 import Header from '../Header/Header';
 import DataSource from '../../data/DataSource';
 import SkeletonEffectLoading from './SkeletonEffectLoading';
+import Button from '../Buttons/Button';
 
 class Movie extends React.Component {
 	constructor() {
@@ -57,9 +58,14 @@ class Movie extends React.Component {
 
 	render = () => {
 		return (
-			<>
+			<React.Fragment>
 				<Header movie={this} />
 				<main>
+					<div className="btn-group mt-10 flex justify-center">
+						{this.state.page > 1 && <Button.PrevMovie decrement={this.decrement} />}
+						<button className="btn btn-success">Page {this.state.page}</button>
+						{this.state.page !== this.state.maxPage - 1 && <Button.NextMovie increment={this.increment} />}
+					</div>
 					{this.state.isMovieFound == false ? (
 						MovieNotFound()
 					) : (
@@ -77,25 +83,10 @@ class Movie extends React.Component {
 											}
 									  })}
 							</div>
-
-							<div className="btn-group mt-20 flex justify-center">
-								{this.state.page > 1 && (
-									<button className="btn btn-outline btn-success" onClick={() => this.decrement()}>
-										«
-									</button>
-								)}
-								<button className="btn btn-success">Page {this.state.page}</button>
-
-								{this.state.page !== this.state.maxPage - 1 && (
-									<button className="btn btn-outline btn-success" onClick={() => this.increment()}>
-										»
-									</button>
-								)}
-							</div>
 						</div>
 					)}
 				</main>
-			</>
+			</React.Fragment>
 		);
 	};
 }
