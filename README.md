@@ -1,6 +1,6 @@
 # WEB MOVIES
 
-Web Movies is a project that provide any movies information. I built this project as a result of my React lessons.
+Web Movies is a project that provide any movies information. I built this project as a result of my React lessons. 
 <br>
 <br>
 
@@ -10,3 +10,13 @@ Web Movies is a project that provide any movies information. I built this projec
 -   Build Tools : [Vite JS](https://www.vitejs.dev/)
 -   CSS Frameworks or Library : [Tailwind CSS](https://tailwindcss.com/) and [Daisy UI](https://daisyui.com/)
 -   API : [OMDB](https://www.omdbapi.com/)
+
+### Feel free to clone this project
+
+```
+  git clone https://github.com/kadekdarmayasa/react-web-movies.git
+  npm install 
+  npm run dev
+```
+
+Thank You for Visit 😊
