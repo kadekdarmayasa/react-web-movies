@@ -11,12 +11,12 @@ Web Movies is a project that provide any movies information. I built this projec
 -   CSS Frameworks or Library : [Tailwind CSS](https://tailwindcss.com/) and [Daisy UI](https://daisyui.com/)
 -   API : [OMDB](https://www.omdbapi.com/)
 
-### Feel free to clone this project
+### Setup
 
 ```
-  git clone https://github.com/kadekdarmayasa/react-web-movies.git
+  git clone
+https://github.com/kadekdarmayasa/react-web-movies.git
   npm install 
   npm run dev
 ```
 
-Thank You for Visit 😊
