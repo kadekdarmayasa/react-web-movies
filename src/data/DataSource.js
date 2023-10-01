@@ -1,21 +1,36 @@
+import axios from "axios";
+
 class DataSource {
-	static #baseUrl = 'http://www.omdbapi.com/?apikey=36a96d2e';
+  static _baseUrl = `http://www.omdbapi.com/?apikey=${
+    import.meta.env.VITE_OMDB_API_KEY
+  }`;
 
-	static getMovie = (keyword, page) => {
-		return new Promise((resolve, reject) => {
-			fetch(`${DataSource.#baseUrl}&s=${keyword}&page=${page}`)
-				.then((response) => response.json())
-				.then((results) => resolve(results));
-		});
-	};
+  static _cancel;
 
-	static getMovieDetails = (movieId) => {
-		return new Promise((resolve, reject) => {
-			fetch(`${DataSource.#baseUrl}&i=${movieId}`)
-				.then((response) => response.json())
-				.then((movies) => resolve(movies));
-		});
-	};
+  static getMovie = (keyword, page) => {
+    return new Promise((resolve) => {
+      axios({
+        method: "GET",
+        url: `${this._baseUrl}&s=${keyword}&page=${page}`,
+        cancelToken: new axios.CancelToken((c) => (this._cancel = c)),
+      })
+        .then((response) => {
+          resolve(response.data);
+        })
+        .catch((err) => {
+          if (axios.isCancel(err)) return;
+        });
+    });
+  };
+
+  static getMovieDetails = (movieId) => {
+    return new Promise((resolve) => {
+      axios({
+        method: "GET",
+        url: `${this._baseUrl}&i=${movieId}`,
+      }).then((response) => resolve(response.data));
+    });
+  };
 }
 
 export default DataSource;
